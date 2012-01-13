@@ -1,13 +1,9 @@
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <time.h>
 #include <string.h>
 #include <stdio.h>
-
+#include <udp_sender.h>
 #include <unistd.h>
+
 #define CONST_HOST 1
 #define CONST_PORT 2
 #define CONST_MSG 3
