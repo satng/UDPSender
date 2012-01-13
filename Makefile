@@ -1,6 +1,6 @@
 CC = gcc
 INPUT = udp_sender.c
-OUTPUT = upd_sender
+OUTPUT = udp_sender
 PARAMS = -01 -Wall
 INCLUDE_DIR = ./include/
 
