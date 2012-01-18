@@ -2,45 +2,59 @@
 #include <string.h>
 #include <stdio.h>
 #include <udp_sender.h>
-#include <unistd.h>
 
 #define CONST_HOST 1
 #define CONST_PORT 2
 #define CONST_MSG 3
 
+void *_run_sender_thread(void *arg) {
+    container *c = (void *) malloc(sizeof(container)); 
+    c = ((container*)(arg));
+    
+    if ((c->fd  = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
+        perror("socket");
+    
+    if (setsockopt(c->fd, SOL_SOCKET, SO_BROADCAST, (void *) &_bp, sizeof(_bp)) < 0)
+        perror("setsockopt()");
+    
+    memset(&c->addr, 0, sizeof(c->addr));
+    c->addr.sin_family = AF_INET;
+    c->addr.sin_addr.s_addr = inet_addr(c->host);
+    c->addr.sin_port = htons(c->port);
+    
+    unsigned int msg_len = strlen(c->message);
+    
+    while(1) { 
+        if (sendto(c->fd, c->message, msg_len, 0, (struct sockaddr *) &c->addr, sizeof(c->addr)) != msg_len)
+            perror("sendto() sent a different number of bytes than expected");
+        else 
+            printf("[+] Sending to %s:%d\n[+] ^C to end.\n", c->host, c->port);
+        sleep(3);
+    };
+    
+    free(c);
+    pthread_exit(0);
+}
+
 int main(int argc, char *argv[]) { 
-    struct sockaddr_in addr;
-    int fd;
-    int _bp = 1;
-    unsigned int msg_len = 0;
+    pthread_t th;
+    container *ct;
+    ct = (void *) malloc(sizeof(container));
     
     if (argc != 4) {
         fprintf(stderr, "Error in usage: %s <host> <port> <msg>\n", argv[0]);
         return -1;
     }
-
-    char *message = argv[CONST_MSG];
-    char *host = argv[CONST_HOST];
-    unsigned short port = atoi(argv[CONST_PORT]);
     
-    printf("[+] Sending to %s:%d\n", host, port);
+    ct->host = argv[CONST_HOST];
+    ct->port = atoi(argv[CONST_PORT]);
+    ct->message = argv[CONST_MSG];
 
-    if ((fd  = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
-        perror("socket");
+    if (pthread_create(&th, NULL, _run_sender_thread(ct), NULL) != 0)
+        perror("creation of thread fail: ");
     
-    if (setsockopt(fd, SOL_SOCKET, SO_BROADCAST, (void *) &_bp, sizeof(_bp)) < 0)
-        perror("setsockopt()");
-
-    memset(&addr, 0, sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(host);
-    addr.sin_port = htons(port);
-    
-    msg_len = strlen(message);
-    while (1) {
-        if (sendto(fd, message, msg_len, 0, (struct sockaddr *) &addr, sizeof(addr)) != msg_len)
-            perror("sendto() sent a different number of bytes than expected");
-        sleep(3);
-    }
+    pthread_join(th, NULL);
+    free(ct);
+    return 0;
 }
 
