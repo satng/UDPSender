@@ -33,7 +33,7 @@ void *_run_sender_thread(void *arg) {
     };
     
     free(c);
-    pthread_exit(0);
+    pthread_exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char *argv[]) { 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     
     if (argc != 4) {
         fprintf(stderr, "Error in usage: %s <host> <port> <msg>\n", argv[0]);
-        return -1;
+        return EXIT_FAILURE;
     }
     
     ct->host = argv[CONST_HOST];
@@ -55,6 +55,6 @@ int main(int argc, char *argv[]) {
     
     pthread_join(th, NULL);
     free(ct);
-    return 0;
+    return EXIT_SUCCESS;
 }
 
