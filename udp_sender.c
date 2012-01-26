@@ -24,7 +24,7 @@ void *_run_sender_thread(void *arg) {
     
     unsigned int msg_len = strlen(c->message);
     
-    while(1) { 
+    while(1) {
         if (sendto(c->fd, c->message, msg_len, 0, (struct sockaddr *) &c->addr, sizeof(c->addr)) != msg_len)
             perror("sendto() sent a different number of bytes than expected");
         else 
