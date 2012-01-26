@@ -16,33 +16,26 @@ int main(int argc, char *argv[]) {
     int sockfd;
     char buffer[1024];
     struct sockaddr_in serv_addr;
-    int m_port = -2;
-    char *m_host = (char *) malloc(sizeof(char));
+    int m_port = -1;
+    int counter;
     
-//    if (argc < 2) {
-//        printf("ATTENTION: no host provided. Insert your local address.\n");
-//        return 1;
-//    } else {
-        int counter;
-        while ( (counter = getopt(argc, argv, "h:p:v:")) != -1 )
-            switch (counter) {
-            case 'p':
-                m_port = atoi(optarg);
-                break;
-            case 'h':
-                m_host = optarg;
-                break;
-            case 'v':
-                printf("The usage. To be implemented.\n");
-                return 0;
-                break;
-            default:
-                m_port = DEF_PORT;
-            }
-    //}   
+    if (argc < 2 ) {
+        printf("Error in usage: try %s -h\n", argv[0]);
+        return 1;
+    }
     
-    //m_port = DEF_PORT;
-    //m_host = argv[1];
+    while ( (counter = getopt(argc, argv, "p:h")) != -1 )
+        switch (counter) {
+        case 'p':
+            m_port = atoi(optarg);
+            break;
+        case 'h':
+            printf("Options available:\n\t-p:\t\tthe port\n");
+            return 1;
+        default:
+            printf("Error in usage, try with: %s -h\n", argv[0]);
+            return 1;
+        }
     
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         perror("ERROR opening socket");
@@ -65,25 +58,13 @@ int main(int argc, char *argv[]) {
         close(sockfd);
         exit(1);
     }
+   
+    printf("Try to read from localhost:%d\n", m_port);
     
-    struct ip_mreq group;
-    group.imr_multiaddr.s_addr = inet_addr(DEF_HOST);
-    group.imr_interface.s_addr = inet_addr(m_host);
-    
-    if (setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void *)&group, sizeof(group)) < 0) {
-        perror("Multicast error");
-        close(sockfd);
-        exit(1);
-    }
-    
-    printf("Try to read from %s:%d\n", m_host, m_port);
-    
-    if (read(sockfd, buffer, sizeof(buffer)) < 0) 
-       error("ERROR: reading from socket");
-    else
-        printf("Here is the message: %s\n", buffer);
+    while (read(sockfd, buffer, sizeof(buffer)) != -1)
+        printf("%s\n\n", buffer);
      
     close(sockfd);
-    free(m_host);
+    //free(m_host);
     return 0; 
 }
