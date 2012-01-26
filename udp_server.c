@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     int sockfd;
     char buffer[1024];
     struct sockaddr_in serv_addr;
-    int m_port;
+    int m_port = -2;
     char *m_host = (char *) malloc(sizeof(char));
     
 //    if (argc < 2) {
