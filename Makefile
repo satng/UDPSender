@@ -1,11 +1,14 @@
 CC = gcc
-INPUT = udp_sender.c
-OUTPUT = udp_sender
+INPUT_SENDER = udp_sender.c
+INPUT_SERVER = udp_server.c
+OUTPUT_SENDER = udp_sender
+OUTPUT_SERVER = udp_server
 PARAMS = -g -01 -Wall
 INCLUDE_DIR = ./include/
 
 all:
-	${CC} ${PARAMS} -I${INCLUDE_DIR} ${INPUT} -o ${OUTPUT} 
+	${CC} ${PARAMS} -I${INCLUDE_DIR} ${INPUT_SENDER} -o ${OUTPUT_SENDER}
+	${CC} ${PARAMS} -I${INCLUDE_DIR} ${INPUT_SERVER} -o ${OUTPUT_SERVER}	 
 
 clean:
-	rm -rf ${OUTPUT}
+	rm -rf ${OUTPUT_SENDER} ${OUTPUT_SERVER}
