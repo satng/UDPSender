@@ -10,6 +10,7 @@
 
 #define DEF_PORT 30303
 #define DEF_HOST "192.168.1.255"
+//#define DEF_HOST "192.168.0.255"
 #define DEF_MESSAGE "{\"exec\":{\"dev\":\"e4:ce:8f:15:6d:8a\",\"time\": 12345, \"pwd\":\"xxx\",\"grp\":0,\"op\":1,\"ack\":true,\"argc\":1,\"argv\":[{\"type\":\"int\",\"value\":3}]}}"
 
 typedef enum {true, false} boolean;
