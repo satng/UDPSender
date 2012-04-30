@@ -10,6 +10,7 @@
 #include <udp_ports.h>
 
 #define DEF_HOST "192.168.1.255"
+//#define DEF_HOST "192.168.1.63"
 //#define DEF_HOST "192.168.0.255"
 #define DEF_MESSAGE "{\"status\":{\"dev\":\"e4:ce:8f:15:6d:8a\",\"time\": 12345,\"type\":1,\"subt\":0,\"argc\":0,\"argv\":[]}}"
 
