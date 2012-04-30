@@ -45,8 +45,8 @@ int main(int argc, char *argv[]) {
     
     if (argc != 4) {
         fprintf(stderr, "Error in usage: %s <host> <port> <message>\n", argv[0]);
-        printf("Using default value: %s:%d %s\n", DEF_HOST, DEF_PORT, DEF_MESSAGE);
-        ct->port = DEF_PORT;
+        printf("Using default value: %s:%d %s\n", DEF_HOST, DEF_SEND_PORT, DEF_MESSAGE);
+        ct->port = DEF_SEND_PORT;
         ct->host = DEF_HOST;
         ct->message = DEF_MESSAGE;
     } else {

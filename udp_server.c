@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <udp_sender.h>
+#include <udp_ports.h>
 
 void error(const char *msg) {
     perror(msg);
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]) {
             m_port = atoi(optarg);
             break;
         case 'h':
-            printf("Options available:\n\t-p:\t\tthe port\n");
+            printf("Options available:\n\t-p:\tthe port\n");
             return 1;
         default:
             printf("Error in usage, try with: %s -h\n", argv[0]);
