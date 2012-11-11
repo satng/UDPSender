@@ -7,8 +7,20 @@
 #define CONST_PORT 2
 #define CONST_MSG 3
 
-void *_run_sender_thread(void *arg) {
-    c = ((container*)(arg));
+int main(int argc, char *argv[]) { 
+    container *c = (void *) malloc(sizeof(container));
+    
+    if (argc != 4) {
+        fprintf(stderr, "Error in usage: %s <host> <port> <message>\n", argv[0]);
+        printf("Using default value: %s:%d %s\n", DEF_HOST, DEF_SEND_PORT, DEF_MESSAGE);
+        c->port = DEF_SEND_PORT;
+        c->host = DEF_HOST;
+        c->message = DEF_MESSAGE;
+    } else {
+        c->host = argv[CONST_HOST];
+        c->port = atoi(argv[CONST_PORT]);
+        c->message = argv[CONST_MSG];
+    }
     
     if ((c->fd  = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
         perror("socket");
@@ -33,32 +45,6 @@ void *_run_sender_thread(void *arg) {
         sleep(3);
     };
     
-   free(c);
-    pthread_exit(EXIT_SUCCESS);
-}
-
-int main(int argc, char *argv[]) { 
-    pthread_t th;
-    container *ct;
-    ct = (void *) malloc(sizeof(container));
-    
-    if (argc != 4) {
-        fprintf(stderr, "Error in usage: %s <host> <port> <message>\n", argv[0]);
-        printf("Using default value: %s:%d %s\n", DEF_HOST, DEF_SEND_PORT, DEF_MESSAGE);
-        ct->port = DEF_SEND_PORT;
-        ct->host = DEF_HOST;
-        ct->message = DEF_MESSAGE;
-    } else {
-        ct->host = argv[CONST_HOST];
-        ct->port = atoi(argv[CONST_PORT]);
-        ct->message = argv[CONST_MSG];
-    }
-    
-    if (pthread_create(&th, NULL, &_run_sender_thread, &ct) != 0)
-        perror("creation of thread fail: ");
-    
-    pthread_join(th, NULL);
-    free(ct);
     return EXIT_SUCCESS;
 }
 

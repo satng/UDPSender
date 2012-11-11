@@ -11,4 +11,6 @@ all:
 	${CC} ${PARAMS} -I${INCLUDE_DIR} ${INPUT_SERVER} -o ${OUTPUT_SERVER}	 
 
 clean:
-	rm -rf ${OUTPUT_SENDER} ${OUTPUT_SERVER}
+	rm -rf ${OUTPUT_SENDER} 
+	rm -rf ${OUTPUT_SERVER}
+	rm -rf *.dSYM*
