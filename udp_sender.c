@@ -8,7 +8,6 @@
 #define CONST_MSG 3
 
 void *_run_sender_thread(void *arg) {
-    container *c = (void *) malloc(sizeof(container)); 
     c = ((container*)(arg));
     
     if ((c->fd  = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
@@ -55,7 +54,7 @@ int main(int argc, char *argv[]) {
         ct->message = argv[CONST_MSG];
     }
     
-    if (pthread_create(&th, NULL, _run_sender_thread(ct), NULL) != 0)
+    if (pthread_create(&th, NULL, &_run_sender_thread, &ct) != 0)
         perror("creation of thread fail: ");
     
     pthread_join(th, NULL);
